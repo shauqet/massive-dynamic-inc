@@ -13,7 +13,7 @@
                         <div class="form-group mx-2 mt-2">
                             <label class="d-block" for="path">File * </label>
                             <div class="input-group mt-2" :class="{ 'border border-danger': contactPersonsErrors.pathErrorPresent }" style="border-radius: 0.25rem;">
-                                <input id="cover_photo" class="" :class="{ 'border border-danger': contactPersonsErrors.pathErrorPresent }" name="path" type="file" ref="fileupload" @change="onFileSelected">
+                                <input id="path" :class="{ 'border border-danger': contactPersonsErrors.pathErrorPresent }" name="path" type="file" ref="fileupload" @change="onFileSelected">
                             </div>
                             <small class="text-danger" v-if="contactPersonsErrors.pathErrorPresent">
                                 {{ contactPersonsErrors.path }}
@@ -122,10 +122,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .modal-body .invalid-tab {
-        color: #dc3545;
-        background-color: #F8D3D7;
-    }
-</style>

@@ -30,7 +30,7 @@
                         <td class="text-center">{{ contactPerson.email }}
                         <td class="text-center">{{ contactPerson.phone_number }}</td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-info" @click="openEditModal(contactPerson)">
+                            <button class="btn btn-sm btn-primary" @click="openEditModal(contactPerson)">
                                 Edit
                                 <i class="fa fa-edit"></i>
                             </button>

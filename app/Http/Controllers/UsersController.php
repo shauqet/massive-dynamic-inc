@@ -47,7 +47,9 @@ class UsersController extends Controller
     {
         $validated = $request->validated();
         $validated["create_user_id"] = auth()->user()->id;
-        $validated["client_id"] = Str::random(6);
+        if(auth()->user()->role===User::CLIENT) {
+            $validated["client_id"] = Str::random(6);
+        }
         $validated["password"] = bcrypt($validated["password"]);
         $user = User::create($validated);
         return $user ? response()->json(["success", $user], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
@@ -126,7 +128,8 @@ class UsersController extends Controller
         $users = User::where(function ($query) use ($searchKeword) {
             $query->where("name", "LIKE", "%$searchKeword%")
                 ->orWhere("username", "LIKE", "%$searchKeword%")
-                ->orWhere("email", "LIKE", "%$searchKeword%");
+                ->orWhere("email", "LIKE", "%$searchKeword%")
+                ->orWhere("client_id", "LIKE", "%$searchKeword%");
         });
         if(auth()->user()->role===User::SECRETARY){
             $users = $users->where(function ($query) {

@@ -3,13 +3,13 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 v-show="!editmode" class="modal-title" id="create-and-edit-modal-label">Add new</h5>
-                    <h5 v-show="editmode" class="modal-title" id="create-and-edit-modal-label">Edit data</h5>
+                    <h5 v-show="!editMode" class="modal-title" id="create-and-edit-modal-label">Add new</h5>
+                    <h5 v-show="editMode" class="modal-title" id="create-and-edit-modal-label">Edit data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="editmode ? updateUser() : storeUser()">
+                <form @submit.prevent="editMode ? updateUser() : storeUser()">
                     <div class="modal-body">
                         <div class="form-group mx-2 mt-2">
                             <label for="name">Name *</label>
@@ -84,7 +84,7 @@
                         <button id="updateUsersButton"
                                 class="btn btn-primary"
                                 type="submit"
-                                v-show="editmode"
+                                v-show="editMode"
                                 @click="storeUpdateDisabled = true">
                             Save
                             <span class="spinner-border-sm"
@@ -95,7 +95,7 @@
                         <button id="storeUser"
                                 class="btn btn-primary"
                                 type="submit"
-                                v-show="!editmode"
+                                v-show="!editMode"
                                 @click="storeUpdateDisabled = true">
                             Add
                             <span class="spinner-border-sm"
@@ -120,7 +120,7 @@
             return {
                 authUserData: {},
                 storeUpdateDisabled: false,
-                editmode: true,
+                editMode: true,
                 usersForm: {
                     id: "",
                     name: "",
@@ -146,7 +146,7 @@
         },
         methods: {
             createUser() {
-                this.editmode = false;
+                this.editMode = false;
                 this.resetUserErrors();
                 this.resetUserForm();
                 $('#create-and-edit-modal').modal('show');
@@ -172,14 +172,13 @@
                         }
                     }).catch(error => {
                     this.storeUpdateDisabled = false;
-                    console.log(error.response)
                     if (error.response.status === 422) {
                         this.checkForValidationErrors(error.response.data.errors);
                     }
                 });
             },
             editUser(user) {
-                this.editmode = true;
+                this.editMode = true;
                 this.resetUserForm();
                 this.resetUserErrors();
                 this.fillUsersForm(user);
@@ -197,8 +196,6 @@
                 }
                 formData.append("role", this.usersForm.role);
                 formData.append("_method", "PATCH");
-
-                console.log( this.usersForm.password)
 
                 const config = { headers: { "content-type": "multipart/form-data" } };
                 axios.post(`${window.base_url}/admin/users/${this.usersForm.id}`, formData, config)
@@ -287,10 +284,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .modal-body .invalid-tab {
-        color: #dc3545;
-        background-color: #F8D3D7;
-    }
-</style>

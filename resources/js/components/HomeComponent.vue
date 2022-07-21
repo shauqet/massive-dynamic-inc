@@ -26,8 +26,12 @@
                                 <label v-else-if="authUserData.role===2">Secretary</label>
                                 <label v-else-if="authUserData.role===3">Client</label>
                             </div>
+                            <div class="form-group mx-2 mt-2" v-if="authUserData.role===3">
+                                <div>Client ID: </div>
+                                <label>{{ authUserData.client_id }}</label>
+                            </div>
                             <div v-if="authUserData.role===1 || authUserData.role===2" class="form-group mx-2 mt-2">
-                                <button class="btn btn-sm btn-info" @click="openEditModal(authUserData)">
+                                <button class="btn btn-sm btn-primary" @click="openEditModal(authUserData)">
                                     Edit
                                     <i class="fa fa-edit"></i>
                                 </button>

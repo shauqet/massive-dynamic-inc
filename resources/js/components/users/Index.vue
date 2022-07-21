@@ -29,7 +29,7 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th class="text-center">ID</th>
+                        <th class="text-center">Client ID</th>
                         <th class="text-center">Name</th>
                         <th class="text-center">Username</th>
                         <th class="text-center">Email</th>
@@ -63,7 +63,7 @@
                             </router-link>
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-info" @click="openEditModal(user)">
+                            <button class="btn btn-sm btn-primary" @click="openEditModal(user)">
                                 Edit
                                 <i class="fa fa-edit"></i>
                             </button>

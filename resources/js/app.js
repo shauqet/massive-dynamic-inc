@@ -10,17 +10,7 @@ window.$ = $;
 // Vuex
 import Vuex from 'vuex'
 Vue.use(Vuex);
-export const store = new Vuex.Store({
-    state: {
-        aboutUs: "",
-        openCreateTextAndPhotoModal: false,
-    },
-    mutations: {
-        setAboutUs(state, model) {
-            state.aboutUs = model;
-        }
-    }
-});
+export const store = new Vuex.Store({});
 
 // Vue router and axios
 import VueRouter from 'vue-router';
@@ -34,14 +24,6 @@ Vue.component('pagination', require('laravel-vue-pagination'));
 // Sweetalert 2
 import Swal from 'sweetalert2';
 window.Swal = Swal;
-
-// BootstrapVue
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
-Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-
 
 // Custom directives
 Vue.directive('tooltip', function(el, binding){
@@ -61,7 +43,6 @@ import DocumentsComponent from "./components/documents/Index"
 
 // Routes
 const routes = [
-    // CMS routes
     { path: '/admin', name: 'HomeComponent', component: HomeComponent },
     { path: '/admin/user', name: 'UsersComponent', component: UsersComponent },
     { path: '/admin/contact-person/:id', name: 'ContactPersonsComponent', component: ContactPersonsComponent },

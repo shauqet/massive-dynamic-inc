@@ -3,13 +3,13 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 v-show="!editmode" class="modal-title" id="create-and-edit-modal-label">Add new</h5>
-                    <h5 v-show="editmode" class="modal-title" id="create-and-edit-modal-label">Edit data</h5>
+                    <h5 v-show="!editMode" class="modal-title" id="create-and-edit-modal-label">Add new</h5>
+                    <h5 v-show="editMode" class="modal-title" id="create-and-edit-modal-label">Edit data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="editmode ? updateContactPersons() : storeContactPersons()">
+                <form @submit.prevent="editMode ? updateContactPersons() : storeContactPersons()">
                     <div class="modal-body">
                         <div class="form-group mx-2 mt-2">
                             <label for="name">Name *</label>
@@ -56,7 +56,7 @@
                         <button id="updateContactPersonssButton"
                                 class="btn btn-primary"
                                 type="submit"
-                                v-show="editmode"
+                                v-show="editMode"
                                 @click="storeUpdateDisabled = true">
                             Save
                             <span class="spinner-border-sm"
@@ -67,7 +67,7 @@
                         <button id="storeContactPersons"
                                 class="btn btn-primary"
                                 type="submit"
-                                v-show="!editmode"
+                                v-show="!editMode"
                                 @click="storeUpdateDisabled = true">
                             Add
                             <span class="spinner-border-sm"
@@ -90,7 +90,7 @@
             return {
                 authUserData: {},
                 storeUpdateDisabled: false,
-                editmode: true,
+                editMode: true,
                 contactPersonsForm: {
                     id: "",
                     name: "",
@@ -109,7 +109,7 @@
         },
         methods: {
             createContactPersons() {
-                this.editmode = false;
+                this.editMode = false;
                 this.resetContactPersonErrors();
                 this.resetContactPersonForm();
                 $('#create-and-edit-modal').modal('show');
@@ -140,7 +140,7 @@
                 });
             },
             editContactPerson(contactPerson) {
-                this.editmode = true;
+                this.editMode = true;
                 this.resetContactPersonForm();
                 this.resetContactPersonErrors();
                 this.fillContactPersonsForm(contactPerson);
