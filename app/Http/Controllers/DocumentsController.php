@@ -7,7 +7,6 @@ use App\Http\Requests\DocumentRequest;
 use App\Models\Document;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class DocumentsController extends Controller
@@ -35,7 +34,7 @@ class DocumentsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param DocumentRequest $request
      * @return JsonResponse
      */
     public function store(DocumentRequest $request)
@@ -44,7 +43,10 @@ class DocumentsController extends Controller
         $validated["create_user_id"] = auth()->user()->id;
         $validated["path"] = FilesHelper::uploadFile($validated["path"]);
         $document = Document::create($validated);
-        return $document ? response()->json(["success", $document], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        if($document){
+            return response()->json(["success", $document], ResponseAlias::HTTP_OK);
+        }
+        return response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -81,7 +83,7 @@ class DocumentsController extends Controller
         $validated = $request->validated();
         $validated["update_user_id"] = auth()->user()->id;
         $document->update($validated);
-        return $document ? response()->json(["success", $document], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        return response()->json(["success", $document], ResponseAlias::HTTP_OK);
     }
 
     /**

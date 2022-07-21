@@ -55,4 +55,18 @@ class User extends Authenticatable
     public function documents(){
         return $this->hasMany(Document::class);
     }
+
+    public function scopeSearch($query, $searchKeword) {
+        return
+            $query->where(function ($query) use ($searchKeword) {
+                $query->where("name", "LIKE", "%$searchKeword%")
+                    ->orWhere("username", "LIKE", "%$searchKeword%")
+                    ->orWhere("email", "LIKE", "%$searchKeword%")
+                    ->orWhere("client_id", "LIKE", "%$searchKeword%");
+                })->when(auth()->user()->role===User::SECRETARY, function ($query){
+                    $query->where("role",User::CLIENT);
+                })
+                ->orderBy("id", "DESC")
+                ->paginate(10);
+    }
 }

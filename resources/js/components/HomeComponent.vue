@@ -37,7 +37,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="col-6" v-if="authUserData.contact_persons.length">
+                        <div class="col-6" v-if="authUserData.role === 3">
                             <div class="form-group mx-2 mt-2">
                                 <div>Contact persons: </div>
                                 <table class="table table-bordered table-striped">
@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-6">
                         </div>
-                        <div class="col-6" v-if="authUserData.documents.length">
+                        <div class="col-6" v-if="authUserData.role === 3">
                             <div class="form-group mx-2 mt-2">
                                 <div>Documents: </div>
                                 <table class="table table-bordered table-striped">

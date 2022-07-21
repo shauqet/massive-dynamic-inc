@@ -27,7 +27,7 @@
                     <tr v-for="document in documents" :key="document.id">
                         <td class="text-center">{{ document.path.substring(11) }}</td>
                         <td class="text-center">
-                            <a :href="document.path">
+                            <a :href="document.path" target="_blank">
                                 <i class="fa fa-eye"></i>
                             </a>
                         </td>
@@ -68,8 +68,6 @@
                 documents: [],
                 clientName: [],
             };
-        },
-        created() {
         },
         methods: {
             loadDocuments(page = 1) {
@@ -129,12 +127,23 @@
                 });
             },
         },
-        mounted() {
+        created() {
+            this.loadAdminInfo = axios.get(`${window.base_url}/admin/admin-info`)
+                .then(response => {
+                    this.authUserData = response.data[1];
+                }).catch(() => {
+                Swal.fire("Error!", "Error", "warning");
+            });
+        },
+        async mounted() {
+            await this.loadAdminInfo;
             this.loadDocuments();
-            this.loadAdminInfo();
             this.loadUserInfo();
             this.$emit('loadBreadcrumbLink', {url: '/user', pageName: 'Documents'});
             EventBus.$on('load-documents', () => this.loadDocuments());
+            if(this.authUserData.role !==1){
+                await this.$router.push('/admin')
+            }
         }
     }
 </script>

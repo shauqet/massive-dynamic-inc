@@ -42,7 +42,10 @@ class ContactPersonsController extends Controller
         $validated = $request->validated();
         $validated["create_user_id"] = auth()->user()->id;
         $contactPerson = ContactPerson::create($validated);
-        return $contactPerson ? response()->json(["success", $contactPerson], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        if($contactPerson){
+            return response()->json(["success", $contactPerson], ResponseAlias::HTTP_OK);
+        }
+        return response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -79,7 +82,7 @@ class ContactPersonsController extends Controller
         $validated = $request->validated();
         $validated["update_user_id"] = auth()->user()->id;
         $contactPerson->update($validated);
-        return $contactPerson ? response()->json(["success", $contactPerson], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        return response()->json(["success", $contactPerson], ResponseAlias::HTTP_OK);
     }
 
     /**

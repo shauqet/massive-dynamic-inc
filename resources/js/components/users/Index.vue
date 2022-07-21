@@ -35,7 +35,7 @@
                         <th class="text-center">Email</th>
                         <th class="text-center">Role</th>
                         <th class="text-center">Contact</th>
-                        <th class="text-center">Documents</th>
+                        <th class="text-center" v-if="authUserData.role===1">Documents</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -57,7 +57,7 @@
                                 <i class="fa fa-eye"></i>
                             </router-link>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center" v-if="authUserData.role===1">
                             <router-link class="nav-link" :to="{ path: '/admin/document/'+user.id }" v-if="user.role===3">
                                 <i class="fa fa-eye"></i>
                             </router-link>

@@ -52,7 +52,10 @@ class UsersController extends Controller
         }
         $validated["password"] = bcrypt($validated["password"]);
         $user = User::create($validated);
-        return $user ? response()->json(["success", $user], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        if($user){
+            return response()->json(["success", $user], ResponseAlias::HTTP_OK);
+        }
+        return response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -125,19 +128,8 @@ class UsersController extends Controller
      * @return JsonResponse
      */
     public function getSearched($searchKeword) {
-        $users = User::where(function ($query) use ($searchKeword) {
-            $query->where("name", "LIKE", "%$searchKeword%")
-                ->orWhere("username", "LIKE", "%$searchKeword%")
-                ->orWhere("email", "LIKE", "%$searchKeword%")
-                ->orWhere("client_id", "LIKE", "%$searchKeword%");
-        });
-        if(auth()->user()->role===User::SECRETARY){
-            $users = $users->where(function ($query) {
-                $query->where("role",User::CLIENT);
-            });
-        }
-        $users = $users->orderBy("id", "DESC")->paginate(10);
-        return $users ? response()->json(["success", $users], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        $users = User::search($searchKeword);
+        return response()->json(["success", $users], ResponseAlias::HTTP_OK);
     }
 
     /**
