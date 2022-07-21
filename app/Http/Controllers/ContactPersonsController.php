@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactPersonRequest;
 use App\Models\ContactPerson;
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ContactPersonsController extends Controller
 {
@@ -30,18 +34,21 @@ class ContactPersonsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ContactPersonRequest $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(ContactPersonRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $validated["create_user_id"] = auth()->user()->id;
+        $contactPerson = ContactPerson::create($validated);
+        return $contactPerson ? response()->json(["success", $contactPerson], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ContactPerson  $contactPerson
+     * @param ContactPerson $contactPerson
      * @return \Illuminate\Http\Response
      */
     public function show(ContactPerson $contactPerson)
@@ -52,7 +59,7 @@ class ContactPersonsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ContactPerson  $contactPerson
+     * @param ContactPerson $contactPerson
      * @return \Illuminate\Http\Response
      */
     public function edit(ContactPerson $contactPerson)
@@ -63,23 +70,44 @@ class ContactPersonsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ContactPerson  $contactPerson
-     * @return \Illuminate\Http\Response
+     * @param ContactPersonRequest $request
+     * @param ContactPerson $contactPerson
+     * @return JsonResponse
      */
-    public function update(Request $request, ContactPerson $contactPerson)
+    public function update(ContactPersonRequest $request, ContactPerson $contactPerson)
     {
-        //
+        $validated = $request->validated();
+        $validated["update_user_id"] = auth()->user()->id;
+        $contactPerson->update($validated);
+        return $contactPerson ? response()->json(["success", $contactPerson], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ContactPerson  $contactPerson
-     * @return \Illuminate\Http\Response
+     * @param ContactPerson $contactPerson
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(ContactPerson $contactPerson)
     {
-        //
+        $contactPerson->delete();
+        return response()->json(["success"], ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function contactPerson()
+    {
+        return view("layouts.cms");
+    }
+
+    public function byUserId( $userId)
+    {
+        $contactPersons = ContactPerson::where("user_id", $userId)->orderBy("id", "DESC")->paginate(10);
+        return response()->json(["success", $contactPersons], ResponseAlias::HTTP_OK);
     }
 }

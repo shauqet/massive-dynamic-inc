@@ -55,6 +55,33 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6" v-if="authUserData.documents.length">
+                            <div class="form-group mx-2 mt-2">
+                                <div>Documents: </div>
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center">Title</th>
+                                        <th class="text-center">Document</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="document in authUserData.documents" :key="document.id">
+                                        <td class="text-center">{{ document.path.substring(11) }}</td>
+                                        <td class="text-center">
+                                            <a :href="document.path">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,6 +108,7 @@
                 axios.get(`${window.base_url}/admin/admin-info`)
                     .then(response => {
                         this.authUserData = response.data[1];
+                        console.log(this.authUserData)
                     }).catch(() => {
                     Swal.fire("Error!", "Error", "warning");
                 });

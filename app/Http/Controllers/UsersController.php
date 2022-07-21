@@ -7,6 +7,8 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class UsersController extends Controller
 {
@@ -22,7 +24,7 @@ class UsersController extends Controller
             $users = $users->where("role",User::CLIENT);
         }
         $users = $users->paginate(10);
-        return response()->json(["success", $users], 200);
+        return response()->json(["success", $users],ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -45,20 +47,21 @@ class UsersController extends Controller
     {
         $validated = $request->validated();
         $validated["create_user_id"] = auth()->user()->id;
-        $validated["password"] = bcrypt("password");
+        $validated["client_id"] = Str::random(6);
+        $validated["password"] = bcrypt($validated["password"]);
         $user = User::create($validated);
-        return $user ? response()->json(["success", $user], 200) : response()->json(["error"], 500);
+        return $user ? response()->json(["success", $user], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
      * Display the specified resource.
      *
      * @param User $user
-     * @return Response
+     * @return JsonResponse
      */
     public function show(User $user)
     {
-        //
+        return response()->json(["success", $user],ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -83,8 +86,11 @@ class UsersController extends Controller
     {
         $validated = $request->validated();
         $validated["update_user_id"] = auth()->user()->id;
+        if(isset($validated["password"])){
+            $validated["password"] = bcrypt($validated["password"]);
+        }
         $user->update($validated);
-        return $user ? response()->json(["success", $user], 200) : response()->json(["error"], 500);
+        return response()->json(["success", $user], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -97,7 +103,7 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return response()->json(["success"], 200);
+        return response()->json(["success"], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -128,17 +134,17 @@ class UsersController extends Controller
             });
         }
         $users = $users->orderBy("id", "DESC")->paginate(10);
-        return $users ? response()->json(["success", $users], 200) : response()->json(["error"], 500);
+        return $users ? response()->json(["success", $users], ResponseAlias::HTTP_OK) : response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function allUsers()
     {
         $users = User::all();
-        return response()->json(["success", $users], 200);
+        return response()->json(["success", $users], ResponseAlias::HTTP_OK);
     }
 }

@@ -50,6 +50,19 @@
                                 {{ userErrors.email }}
                             </small>
                         </div>
+                        <div class="form-group mx-2 mt-2" v-if="authUserData.role===1 || authUserData.role===2">
+                            <label for="password">Password </label>
+                            <input id="password"
+                                   class="form-control"
+                                   type="password"
+                                   name="password"
+                                   placeholder="Password"
+                                   :class="{ 'border border-danger': userErrors.passwordErrorPresent }"
+                                   v-model="usersForm.password">
+                            <small class="text-danger" v-if="userErrors.passwordErrorPresent">
+                                {{ userErrors.password }}
+                            </small>
+                        </div>
                         <div class="form-group mx-2 mt-2">
                             <label for="role">Role *</label>
                             <select id="role"
@@ -64,25 +77,6 @@
                             <small class="text-danger" v-if="userErrors.roleErrorPresent">
                                 {{ userErrors.role }}
                             </small>
-                        </div>
-                        <div class="form-group mx-2 mt-2" v-if="usersForm.contactPersons.length">
-                            <label>Contact persons:</label>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Username</th>
-                                    <th class="text-center">Email</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr v-for="contactPerson in usersForm.contactPersons" :key="contactPerson.id">
-                                    <td class="text-center">{{ contactPerson.name }}</td>
-                                    <td class="text-center">{{ contactPerson.email }}</td>
-                                    <td class="text-center">{{ contactPerson.phone_number }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -117,20 +111,22 @@
 </template>
 
 <script>
+    import CreateAndEdit from "./../contact-persons/CreateAndEdit.vue";
     import { EventBus } from '../../libraries/event-bus.js';
     import { swalSuccess } from '../../libraries/my-libs.js';
     export default {
+        components: { CreateAndEdit },
         data() {
             return {
                 authUserData: {},
                 storeUpdateDisabled: false,
                 editmode: true,
-                cities: [],
                 usersForm: {
                     id: "",
                     name: "",
                     username: "",
                     email: "",
+                    password: "",
                     role: "",
                     contactPersons: "",
                 },
@@ -141,6 +137,8 @@
                     usernameErrorPresent: false,
                     email: "",
                     emailErrorPresent: false,
+                    password: "",
+                    passwordErrorPresent: false,
                     role: "",
                     roleErrorPresent: false
                 }
@@ -160,6 +158,7 @@
                 formData.append("name", this.usersForm.name);
                 formData.append("username", this.usersForm.username);
                 formData.append("email", this.usersForm.email);
+                formData.append("password", this.usersForm.password);
                 formData.append("role", this.usersForm.role);
 
                 const config = { headers: { 'content-type': 'multipart/form-data' } };
@@ -193,8 +192,13 @@
                 formData.append("name", this.usersForm.name);
                 formData.append("username", this.usersForm.username);
                 formData.append("email", this.usersForm.email);
+                if(this.usersForm.password){
+                    formData.append("password", this.usersForm.password);
+                }
                 formData.append("role", this.usersForm.role);
                 formData.append("_method", "PATCH");
+
+                console.log( this.usersForm.password)
 
                 const config = { headers: { "content-type": "multipart/form-data" } };
                 axios.post(`${window.base_url}/admin/users/${this.usersForm.id}`, formData, config)
@@ -207,6 +211,8 @@
                         }
                     }).catch(error => {
                     this.storeUpdateDisabled = false;
+
+                    console.log(error.response)
                     if (error.response.status === 422) {
                         this.checkForValidationErrors(error.response.data.errors);
                     }
@@ -217,6 +223,7 @@
                 this.usersForm.name = user.name;
                 this.usersForm.username = user.username;
                 this.usersForm.email = user.email;
+                this.usersForm.password = user.password;
                 this.usersForm.role = user.role;
                 this.usersForm.contactPersons = user.contact_persons;
             },
@@ -225,6 +232,7 @@
                 this.usersForm.name = "";
                 this.usersForm.username = "";
                 this.usersForm.email = "";
+                this.usersForm.password = "";
                 this.usersForm.role = "";
                 this.usersForm.contactPersons = {};
             },
@@ -235,6 +243,8 @@
                 this.userErrors.usernameErrorPresent = false;
                 this.userErrors.email = "";
                 this.userErrors.emailErrorPresent = false;
+                this.userErrors.password = "";
+                this.userErrors.passwordErrorPresent = false;
                 this.userErrors.role = "";
                 this.userErrors.roleErrorPresent = false;
             },
@@ -250,6 +260,10 @@
                 if(errors.hasOwnProperty("email")) {
                     this.userErrors.email = errors["email"][0];
                     this.userErrors.emailErrorPresent = true;
+                }
+                if(errors.hasOwnProperty("password")) {
+                    this.userErrors.password = errors["password"][0];
+                    this.userErrors.passwordErrorPresent = true;
                 }
                 if(errors.hasOwnProperty("role")) {
                     this.userErrors.role = errors["role"][0];

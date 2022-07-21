@@ -4,7 +4,6 @@ require('./bootstrap');
 import Vue from 'vue';
 
 // Jquery
-
 import $ from 'jquery';
 window.$ = $;
 
@@ -57,12 +56,16 @@ Vue.directive('tooltip', function(el, binding){
 import App from './App.vue';
 import HomeComponent from "./components/HomeComponent";
 import UsersComponent from "./components/users/Index"
+import ContactPersonsComponent from "./components/contact-persons/Index"
+import DocumentsComponent from "./components/documents/Index"
 
 // Routes
 const routes = [
     // CMS routes
     { path: '/admin', name: 'HomeComponent', component: HomeComponent },
     { path: '/admin/user', name: 'UsersComponent', component: UsersComponent },
+    { path: '/admin/contact-person/:id', name: 'ContactPersonsComponent', component: ContactPersonsComponent },
+    { path: '/admin/document/:id', name: 'DocumentsComponent', component: DocumentsComponent },
 ];
 
 // Router

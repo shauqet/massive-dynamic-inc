@@ -29,10 +29,13 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th class="text-center">ID</th>
                         <th class="text-center">Name</th>
                         <th class="text-center">Username</th>
                         <th class="text-center">Email</th>
                         <th class="text-center">Role</th>
+                        <th class="text-center">Contact</th>
+                        <th class="text-center">Documents</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -42,12 +45,23 @@
                         </td>
                     </tr>
                     <tr v-for="user in users" :key="user.id">
+                        <td class="text-center">{{ user.client_id }}</td>
                         <td class="text-center">{{ user.name }}</td>
                         <td class="text-center">{{ user.username }}</td>
                         <td class="text-center">{{ user.email }}</td>
                         <td class="text-center" v-if="user.role===1">Administrator</td>
                         <td class="text-center" v-else-if="user.role===2">Secretary</td>
                         <td class="text-center" v-else-if="user.role===3">Client</td>
+                        <td class="text-center">
+                            <router-link class="nav-link" :to="{ path: '/admin/contact-person/'+user.id }" v-if="user.role===3">
+                                <i class="fa fa-eye"></i>
+                            </router-link>
+                        </td>
+                        <td class="text-center">
+                            <router-link class="nav-link" :to="{ path: '/admin/document/'+user.id }" v-if="user.role===3">
+                                <i class="fa fa-eye"></i>
+                            </router-link>
+                        </td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-info" @click="openEditModal(user)">
                                 Edit

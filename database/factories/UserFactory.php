@@ -28,7 +28,8 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->companyEmail,
             'role' => User::CLIENT,
             'email_verified_at' => now(),
-            "password" => bcrypt("password"),
+            'password' => bcrypt('password'),
+            'client_id' => Str::random(6),
             'remember_token' => Str::random(10),
         ];
     }

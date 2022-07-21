@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class AdminController extends Controller
 {
@@ -12,7 +13,7 @@ class AdminController extends Controller
         return view("layouts.cms");
     }
     public function getAdminInfo() {
-        $user = User::with('contactPersons')->find(Auth::id());
-        return response()->json(["success", $user], 200);
+        $user = User::with(['contactPersons','documents'])->find(Auth::id());
+        return response()->json(["success", $user], ResponseAlias::HTTP_OK);
     }
 }

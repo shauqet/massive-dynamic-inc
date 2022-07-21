@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactPersonsController;
+use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +30,17 @@ Route::group(["prefix" => "admin", "middleware" => "auth"], function () {
     // Users
     Route::resource('users', UsersController::class);
     Route::get('/users/{searchKeyword}/search', [UsersController::class, 'getSearched']);
-    Route::get('/all-users', [UsersController::class, 'allUsers']);
     Route::get('/user', [UsersController::class, 'user']);
+
+    // Contact persons
+    Route::resource('contact-persons', ContactPersonsController::class);
+    Route::get('/contact-person', [ContactPersonsController::class, 'contactPerson']);
+    Route::get('/contact-person/{userId}', [ContactPersonsController::class, 'contactPerson']);
+    Route::get('/contact-persons-by-user-id/{userId}', [ContactPersonsController::class, 'byUserId']);
+
+    // Documents
+    Route::resource('documents', DocumentsController::class);
+    Route::get('/document', [DocumentsController::class, 'document']);
+    Route::get('/document/{userId}', [DocumentsController::class, 'document']);
+    Route::get('/documents-by-user-id/{userId}', [DocumentsController::class, 'byUserId']);
 });

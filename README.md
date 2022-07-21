@@ -72,6 +72,16 @@ password:password
 
 <br>
 
+username:secretary@secretary.com
+
+password:password
+
+<br>
+
+*Note: The default password for all seeded users is "password"
+
+<br>
+
 [Laravel OpenApi Demo Documentation](http://127.0.0.1:8000/api/documentation)
 
 or

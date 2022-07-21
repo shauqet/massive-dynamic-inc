@@ -2,20 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\ContactPerson;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
-    const ADMINISTRATOR = 1;
-    const SECRETARY = 2;
-    const CLIENT = 3;
+    public const ADMINISTRATOR = 1;
+    public const SECRETARY = 2;
+    public const CLIENT = 3;
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'client_id'
     ];
 
     /**
@@ -51,5 +50,9 @@ class User extends Authenticatable
 
     public function contactPersons(){
         return $this->hasMany(ContactPerson::class);
+    }
+
+    public function documents(){
+        return $this->hasMany(Document::class);
     }
 }
