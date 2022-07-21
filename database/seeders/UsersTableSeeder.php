@@ -24,6 +24,7 @@ class UsersTableSeeder extends Seeder
                 'email_verified_at' => now(),
                 "password" => bcrypt("password"),
                 'remember_token' => Str::random(10),
+                'created_at' => now(),
             ],
             [
                 "name" => "Secretary",
@@ -33,6 +34,7 @@ class UsersTableSeeder extends Seeder
                 'email_verified_at' => now(),
                 "password" => bcrypt("password"),
                 'remember_token' => Str::random(10),
+                'created_at' => now(),
             ]
         ]);
         User::factory(20)->create();
