@@ -53,7 +53,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button id="updateContactPersonssButton"
+                        <button id="updateContactPersonsButton"
                                 class="btn btn-primary"
                                 type="submit"
                                 v-show="editMode"

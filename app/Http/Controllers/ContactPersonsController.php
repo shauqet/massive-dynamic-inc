@@ -5,32 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContactPersonRequest;
 use App\Models\ContactPerson;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ContactPersonsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -46,28 +28,6 @@ class ContactPersonsController extends Controller
             return response()->json(["success", $contactPerson], ResponseAlias::HTTP_OK);
         }
         return response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param ContactPerson $contactPerson
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ContactPerson $contactPerson)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param ContactPerson $contactPerson
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ContactPerson $contactPerson)
-    {
-        //
     }
 
     /**
@@ -101,7 +61,7 @@ class ContactPersonsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Application|Factory|View
      */
     public function contactPerson()
     {
@@ -110,7 +70,7 @@ class ContactPersonsController extends Controller
 
     public function byUserId( $userId)
     {
-        $contactPersons = ContactPerson::where("user_id", $userId)->orderBy("id", "DESC")->paginate(10);
+        $contactPersons = ContactPerson::where("user_id", $userId)->orderByDesc("id")->paginate(10);
         return response()->json(["success", $contactPersons], ResponseAlias::HTTP_OK);
     }
 }

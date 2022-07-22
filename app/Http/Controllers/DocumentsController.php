@@ -6,31 +6,14 @@ use App\Helpers\FilesHelper;
 use App\Http\Requests\DocumentRequest;
 use App\Models\Document;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class DocumentsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -46,44 +29,8 @@ class DocumentsController extends Controller
         if($document){
             return response()->json(["success", $document], ResponseAlias::HTTP_OK);
         }
+
         return response()->json(["error"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param Document $document
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Document $document)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Document $document
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Document $document)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param DocumentRequest $request
-     * @param Document $document
-     * @return JsonResponse
-     */
-    public function update(DocumentRequest $request, Document $document)
-    {
-        $validated = $request->validated();
-        $validated["update_user_id"] = auth()->user()->id;
-        $document->update($validated);
-        return response()->json(["success", $document], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -103,7 +50,7 @@ class DocumentsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Application|Factory|View
      */
     public function document()
     {
@@ -112,7 +59,7 @@ class DocumentsController extends Controller
 
     public function byUserId( $userId)
     {
-        $document = Document::where("user_id", $userId)->orderBy("id", "DESC")->paginate(10);
+        $document = Document::where("user_id", $userId)->orderByDesc("id")->paginate(10);
         return response()->json(["success", $document], ResponseAlias::HTTP_OK);
     }
 }

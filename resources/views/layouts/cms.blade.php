@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Massive Dynamic Inc') }}</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div id="app"></div>

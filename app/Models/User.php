@@ -66,7 +66,7 @@ class User extends Authenticatable
                 })->when(auth()->user()->role===User::SECRETARY, function ($query){
                     $query->where("role",User::CLIENT);
                 })
-                ->orderBy("id", "DESC")
+                ->orderByDesc("id")
                 ->paginate(10);
     }
 }

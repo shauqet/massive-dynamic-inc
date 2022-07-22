@@ -96,10 +96,9 @@
 <script>
     import {EventBus} from "../libraries/event-bus";
     import CreateAndEdit from "./users/CreateAndEdit";
-    import Spinner from "./Spinner";
 
     export default {
-        components: { CreateAndEdit, Spinner },
+        components: { CreateAndEdit },
         data() {
             return {
                 pageIsLoading: true,

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -19,22 +21,14 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::with("contactPersons")->orderBy("id", "DESC");
-        if(auth()->user()->role===User::SECRETARY){
-            $users = $users->where("role",User::CLIENT);
-        }
-        $users = $users->paginate(10);
-        return response()->json(["success", $users],ResponseAlias::HTTP_OK);
-    }
+        $users = User::with("contactPersons")
+            ->when(auth()->user()->role===User::SECRETARY, function ($query){
+                $query->where("role",User::CLIENT);
+            })
+            ->orderByDesc("id")
+            ->paginate(10);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
+        return response()->json(["success", $users],ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -47,7 +41,7 @@ class UsersController extends Controller
     {
         $validated = $request->validated();
         $validated["create_user_id"] = auth()->user()->id;
-        if(auth()->user()->role===User::CLIENT) {
+        if($validated["role"]==User::CLIENT) {
             $validated["client_id"] = Str::random(6);
         }
         $validated["password"] = bcrypt($validated["password"]);
@@ -67,17 +61,6 @@ class UsersController extends Controller
     public function show(User $user)
     {
         return response()->json(["success", $user],ResponseAlias::HTTP_OK);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param User $user
-     * @return Response
-     */
-    public function edit(User $user)
-    {
-        //
     }
 
     /**
@@ -114,7 +97,7 @@ class UsersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Application|Factory|View
      */
     public function user()
     {
@@ -129,17 +112,6 @@ class UsersController extends Controller
      */
     public function getSearched($searchKeword) {
         $users = User::search($searchKeword);
-        return response()->json(["success", $users], ResponseAlias::HTTP_OK);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     */
-    public function allUsers()
-    {
-        $users = User::all();
         return response()->json(["success", $users], ResponseAlias::HTTP_OK);
     }
 }

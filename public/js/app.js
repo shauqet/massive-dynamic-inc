@@ -1933,12 +1933,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -1974,7 +1968,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Logout'
       }).then(function (result) {
         if (result.value) {
-          axios.post("".concat(window.base_url, "/logout")).then(function (response) {
+          axios.post("".concat(window.base_url, "/logout")).then(function () {
             return location.href = "/";
           });
         }
@@ -2013,7 +2007,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _libraries_event_bus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libraries/event-bus */ "./resources/js/libraries/event-bus.js");
 /* harmony import */ var _users_CreateAndEdit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./users/CreateAndEdit */ "./resources/js/components/users/CreateAndEdit.vue");
-/* harmony import */ var _Spinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Spinner */ "./resources/js/components/Spinner.vue");
 //
 //
 //
@@ -2109,13 +2102,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    CreateAndEdit: _users_CreateAndEdit__WEBPACK_IMPORTED_MODULE_1__.default,
-    Spinner: _Spinner__WEBPACK_IMPORTED_MODULE_2__.default
+    CreateAndEdit: _users_CreateAndEdit__WEBPACK_IMPORTED_MODULE_1__.default
   },
   data: function data() {
     return {
@@ -44974,8 +44965,6 @@ var render = function() {
         staticStyle: { "z-index": "2" }
       },
       [
-        _vm._m(0),
-        _vm._v(" "),
         _c("ul", { staticClass: "navbar-nav ml-auto" }, [
           _c("li", { staticClass: "nav-item" }),
           _vm._v(" "),
@@ -45010,7 +44999,7 @@ var render = function() {
           "a",
           {
             staticClass: "brand-link text-center",
-            attrs: { href: _vm.base_url, target: "_blank" }
+            attrs: { href: _vm.base_url + "/admin" }
           },
           [
             _c(
@@ -45155,25 +45144,7 @@ var render = function() {
     _c("aside", { staticClass: "control-sidebar control-sidebar-dark" })
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "navbar-nav" }, [
-      _c("li", { staticClass: "nav-item" }, [
-        _c(
-          "a",
-          {
-            staticClass: "nav-link",
-            attrs: { "data-widget": "pushmenu", href: "#" }
-          },
-          [_c("i", { staticClass: "fas fa-bars" })]
-        )
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -45702,7 +45673,7 @@ var render = function() {
                       ],
                       staticClass: "btn btn-primary",
                       attrs: {
-                        id: "updateContactPersonssButton",
+                        id: "updateContactPersonsButton",
                         type: "submit"
                       },
                       on: {
